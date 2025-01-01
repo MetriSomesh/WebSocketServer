@@ -1,0 +1,22 @@
+{
+  "name": "websocketserver",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "tsc --build && node ./dist/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "typescript": "^5.7.2"
+  },
+  "devDependencies": {
+    "@types/uuid": "^10.0.0",
+    "@types/ws": "^8.5.13",
+    "uuid": "^11.0.3",
+    "ws": "^8.18.0"
+  }
+}
