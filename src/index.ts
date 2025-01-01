@@ -5,6 +5,7 @@ interface User {
   id: string;
   socket: WebSocket;
   preferences: any;
+  joinedAt: number;
 }
 
 interface Room {
@@ -29,6 +30,7 @@ ws.on("connection", (socket) => {
         id: parsedMessage.payload.userId,
         socket,
         preferences: parsedMessage.payload.preferences,
+        joinedAt: Date.now(),
       };
       matchmakingQueue.push(currentUser);
       tryToMatchUsers();
@@ -50,6 +52,26 @@ ws.on("connection", (socket) => {
         });
       }
     }
+    setInterval(() => {
+      const now = Date.now();
+
+      matchmakingQueue.forEach((user) => {
+        if (now - user.joinedAt > 2 * 60 * 1000) {
+          matchmakingQueue = matchmakingQueue.filter((u) => u !== user);
+          user.socket.send(
+            JSON.stringify({
+              type: "timeout",
+              payload: {
+                userId: user.id,
+              },
+            })
+          );
+          console.log(
+            `User ${user.id} timed out and was removed from the queue.`
+          );
+        }
+      });
+    }, 10 * 1000);
   });
 
   socket.on("close", () => {
@@ -69,6 +91,7 @@ ws.on("connection", (socket) => {
 });
 
 function tryToMatchUsers() {
+  console.log("TRY TO MATCH FN CALLED");
   while (matchmakingQueue.length >= 2) {
     const user1 = matchmakingQueue.shift()!;
     const user2 = matchmakingQueue.shift()!;
