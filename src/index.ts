@@ -15,8 +15,8 @@ interface Room {
 let matchmakingQueue: User[] = [];
 let rooms: Map<string, Room> = new Map();
 
-const wsPort = 8080; // Port for the WebSocket server
-const ws = new WebSocketServer({ port: wsPort });
+const wsPort = process.env.PORT || 8080; // Use the PORT variable or default to 8080
+const ws = new WebSocketServer({ port: parseInt(wsPort as string) });
 
 ws.on("connection", (socket) => {
   let currentUser: User | null = null;
