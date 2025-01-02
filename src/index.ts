@@ -91,7 +91,6 @@ ws.on("connection", (socket) => {
 });
 
 function tryToMatchUsers() {
-  console.log("TRY TO MATCH FN CALLED");
   while (matchmakingQueue.length >= 2) {
     const user1 = matchmakingQueue.shift()!;
     const user2 = matchmakingQueue.shift()!;
